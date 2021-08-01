@@ -30,13 +30,12 @@ if (accessToken == null) {
 
 
   // TODO: Replace example call with logic, pass to web worker?
-  // Get Elvis' albums
-  spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
-    function(data) {
-      console.log('Artist albums', data.body);
-    },
-    function(err) {
-      console.error(err);
-    }
-  );
+  const targetWord = 'Pokemon'
+  // Search tracks whose track name contains some text
+  spotifyApi.searchTracks(`track:${targetWord}`)
+    .then(function(data) {
+      console.log('Search tracks by "Love" in the track name', data.body);
+    }, function(e) {
+      console.error(e);
+    });
 }
