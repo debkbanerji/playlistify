@@ -17,6 +17,22 @@ function login() {
   window.location.replace(authorizeURL);
 }
 
+async function findTracksWithString(spotifyApi, targetString) {
+  const searchResult = await spotifyApi.searchTracks(`track:"${targetString}"`);
+  console.log({
+    searchResult
+  });
+  const tracks = (searchResult?.body?.tracks?.items ?? []).map(item => {
+    return {
+      name: item.name,
+      id: item.id,
+      artists: (item.artists ?? []).map(artist => artist.name).join(', '),
+      albumArtURL: (item.album?.images ?? [])[1]?.url
+    };
+  });
+  return tracks;
+}
+
 if (accessToken == null) {
   // TODO: Bind to button
   login();
@@ -31,11 +47,11 @@ if (accessToken == null) {
 
   // TODO: Replace example call with logic, pass to web worker?
   const targetWord = 'Pokemon'
-  // Search tracks whose track name contains some text
-  spotifyApi.searchTracks(`track:${targetWord}`)
-    .then(function(data) {
-      console.log('Search tracks by "Love" in the track name', data.body);
-    }, function(e) {
-      console.error(e);
-    });
+  setTimeout(async () => {
+    const result = await findTracksWithString(spotifyApi, targetWord);
+    console.log({
+      result
+    })
+  }, 10)
+
 }
