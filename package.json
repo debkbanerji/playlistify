@@ -1,5 +1,5 @@
 {
-  "name": "memify",
+  "name": "meme-to-playlist",
   "version": "2021.7.31",
   "description": "Generate meme playlists using dynamic programming",
   "main": "index.js",
@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/debkbanerji/memify.git"
+    "url": "git+https://github.com/debkbanerji/meme-to-playlist.git"
   },
   "author": "debkbanerji",
   "bugs": {
-    "url": "https://github.com/debkbanerji/memify/issues"
+    "url": "https://github.com/debkbanerji/meme-to-playlist/issues"
   },
-  "homepage": "https://github.com/debkbanerji/memify#readme",
+  "homepage": "https://github.com/debkbanerji/meme-to-playlist#readme",
   "dependencies": {
     "spotify-web-api-node": "^5.0.2"
   }

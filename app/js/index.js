@@ -57,12 +57,18 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   wordCountInLatestPhrase[0] = 0;
   trackForLatestPhrase[0] = null;
 
+  // in case we fail
+  const checkedTracks = [];
+
   for (let i = 1; i <= n; i++) {
     const phrasesToCheck = Array.from(Array(i).keys()).map(j => {
       return inputArr.slice(i - j - 1, i);
     });
     const responses = await Promise.all(phrasesToCheck.map(async phrase => {
       const track = await findTrackWithString(spotifyApi, phrase.join(' '));
+      if (track != null) {
+        checkedTracks.push(track);
+      }
       return {
         track,
         phraseLength: phrase.length
@@ -83,8 +89,11 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
     });
   }
 
-  if (!isPossible[n]) {
-    return null; // :(
+  if (!isPossible[n]) { // :(
+    return {
+      isSuccess: false,
+      checkedTracks: [...new Set(array)]
+    };
   }
 
   const result = [];
@@ -95,28 +104,30 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   }
 
   // TODO: verify result with different inputs
-  return result;
+  return {
+    isSuccess: true,
+    result
+  };
 }
 
 if (accessToken == null) {
-  // TODO: Bind to button
+  // TODO: Bind login to button
   login();
 } else {
   // We're logged in - initialize API
   const spotifyApi = new SpotifyWebApi({
-    // redirectUri,
     clientId
   });
   spotifyApi.setAccessToken(accessToken);
 
 
-  // TODO: Replace example call with logic, pass to web worker?
-  const targetWord = 'don\'t you tell me you love me'
+  // TODO: Get from UI
+  const targetWord = 'I can\'t believe this works'
   setTimeout(async () => {
     const result = await getTracksForPhrase(spotifyApi, targetWord, false);
-    console.log({
+    console.log(
       result
-    })
+    );
   }, 10)
 
 }
