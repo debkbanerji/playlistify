@@ -1,0 +1,22 @@
+{
+  "name": "memify",
+  "version": "2021.7.31",
+  "description": "Generate meme playlists using dynamic programming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "browserify index.js -o app/js/spotify-api-bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debkbanerji/memify.git"
+  },
+  "author": "debkbanerji",
+  "bugs": {
+    "url": "https://github.com/debkbanerji/memify/issues"
+  },
+  "homepage": "https://github.com/debkbanerji/memify#readme",
+  "dependencies": {
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
