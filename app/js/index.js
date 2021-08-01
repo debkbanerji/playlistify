@@ -17,12 +17,20 @@ function login() {
   window.location.replace(authorizeURL);
 }
 
+const SEARCH_LIMIT = 50;
+function sanitizedPhrase(phrase) {
+  // preserve spaces
+  return phrase.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
+}
+
 async function findTracksWithString(spotifyApi, targetString) {
-  const searchResult = await spotifyApi.searchTracks(`track:"${targetString}"`);
-  console.log({
-    searchResult
+  const sanitizedTargetString = sanitizedPhrase(targetString)
+  const searchResult = await spotifyApi.searchTracks(`track:"${sanitizedTargetString}"`, {
+    limit: SEARCH_LIMIT
   });
-  const tracks = (searchResult?.body?.tracks?.items ?? []).map(item => {
+  const tracks = (searchResult?.body?.tracks?.items ?? []).filter(item =>
+    sanitizedPhrase(item.name) === sanitizedTargetString
+  ).map(item => {
     return {
       name: item.name,
       id: item.id,
@@ -30,6 +38,7 @@ async function findTracksWithString(spotifyApi, targetString) {
       albumArtURL: (item.album?.images ?? [])[1]?.url
     };
   });
+  tracks.sort((i1, i2) => i1.name.length - i2.name.length);
   return tracks;
 }
 
@@ -46,7 +55,7 @@ if (accessToken == null) {
 
 
   // TODO: Replace example call with logic, pass to web worker?
-  const targetWord = 'Pokemon'
+  const targetWord = 'hello'
   setTimeout(async () => {
     const result = await findTracksWithString(spotifyApi, targetWord);
     console.log({
