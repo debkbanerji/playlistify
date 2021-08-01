@@ -1,6 +1,9 @@
 const SpotifyWebApi = window.SpotifyWebApi;
 const clientId = CLIENT_ID;
 
+const inputText = document.getElementById('input-text')
+const inputButton = document.getElementById('submit-input')
+
 // TODO: Check to see if token is still valid using timestamp?
 const accessTokenRegexMatch = /#access_token=(.*?)&/.exec(window.location.hash);
 const accessToken = accessTokenRegexMatch != null ? accessTokenRegexMatch[1] : null
@@ -49,6 +52,13 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   const inputArr = sanitizedTargetString.split(' ');
   const n = inputArr.length;
 
+  if (n < 1) {
+    return {
+      isSuccess: false,
+      checkedTracks: []
+    };
+  }
+
   // initialize DP arrays
   const isPossible = new Array(n + 1);
   const wordCountInLatestPhrase = new Array(n + 1);
@@ -92,7 +102,7 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   if (!isPossible[n]) { // :(
     return {
       isSuccess: false,
-      checkedTracks: [...new Set(array)]
+      checkedTracks: [...new Set(checkedTracks)]
     };
   }
 
@@ -110,24 +120,41 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   };
 }
 
+window.currentResult = null;
+
+function setNewResult(result) {
+  window.currentResult = result;
+  console.log(
+    result
+  );
+  document.getElementById('output').hidden = false;
+}
+
 if (accessToken == null) {
   // TODO: Bind login to button
+  // TODO: Check for expired token
   login();
 } else {
+  // TODO: unhide relevant UI element
+
   // We're logged in - initialize API
   const spotifyApi = new SpotifyWebApi({
     clientId
   });
   spotifyApi.setAccessToken(accessToken);
 
+  inputButton.addEventListener("click", async () => {
+    inputText.disabled = true;
+    inputButton.disabled = true;
 
-  // TODO: Get from UI
-  const targetWord = 'I can\'t believe this works'
-  setTimeout(async () => {
+    const targetWord = inputText.value;
     const result = await getTracksForPhrase(spotifyApi, targetWord, false);
-    console.log(
-      result
-    );
-  }, 10)
+    setNewResult({
+      input: targetWord,
+      ...result
+    });
 
+    inputText.disabled = false;
+    inputButton.disabled = false;
+  });
 }

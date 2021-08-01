@@ -16,14 +16,48 @@
   <meta property="og:description" content="Generate meme playlists using dynamic programming" />
 
   <style>
-
+    .btn {
+      white-space: nowrap !important;
+    }
   </style>
 
 </head>
 
 <body>
 
-  <h1>TODO: Implement</h1>
+  <div style="margin: 10px; overflow: hidden;">
+
+    <h1 style="margin-bottom: 0; margin-left: 4px">Meme to Playlist</h1>
+    <div style="margin-bottom: 10px; margin-left: 6px">
+      <div style="margin-bottom: 5px;">
+        <small>
+          TODO: Description
+        </small>
+        <br />
+        <small>
+          <a href="https://github.com/debkbanerji/meme-to-playlist" target="_blank">Source Code</a> &bull; <span>Made with ♥ by Deb</span>
+        </small>
+      </div>
+    </div>
+
+    <div id="not-logged-in" class="row">
+      // TODO: Implement login button
+    </div>
+
+    <div id="logged-in" class="row">
+      <div class="col-12">
+        <div style="display: flex;">
+          <input type="text" class="form-control" id="input-text" placeholder="Input text">
+          <button class="btn btn-success text-wrap" type="button" id="submit-input" style="margin-left: 8px;">
+            Try Generating Playlist
+          </button>
+        </div>
+      </div>
+      <div id="output" hidden>
+        // TODO: Implement displaying results - see logs for now
+      </div>
+    </div>
+  </div>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
