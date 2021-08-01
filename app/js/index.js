@@ -18,12 +18,13 @@ function login() {
 }
 
 const SEARCH_LIMIT = 50;
+
 function sanitizedPhrase(phrase) {
   // preserve spaces
   return phrase.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase();
 }
 
-async function findTracksWithString(spotifyApi, targetString) {
+async function findTrackWithString(spotifyApi, targetString) {
   const sanitizedTargetString = sanitizedPhrase(targetString)
   const searchResult = await spotifyApi.searchTracks(`track:"${sanitizedTargetString}"`, {
     limit: SEARCH_LIMIT
@@ -39,7 +40,62 @@ async function findTracksWithString(spotifyApi, targetString) {
     };
   });
   tracks.sort((i1, i2) => i1.name.length - i2.name.length);
-  return tracks;
+  return tracks.length > 0 ? tracks[0] : null;
+}
+
+async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, onProgressUpdate) {
+  const sanitizedTargetString = sanitizedPhrase(targetString).replace(/ +/g, ' ');
+
+  const inputArr = sanitizedTargetString.split(' ');
+  const n = inputArr.length;
+
+  // initialize DP arrays
+  const isPossible = new Array(n + 1);
+  const wordCountInLatestPhrase = new Array(n + 1);
+  const trackForLatestPhrase = new Array(n + 1);
+  isPossible[0] = true;
+  wordCountInLatestPhrase[0] = 0;
+  trackForLatestPhrase[0] = null;
+
+  for (let i = 1; i <= n; i++) {
+    const phrasesToCheck = Array.from(Array(i).keys()).map(j => {
+      return inputArr.slice(i - j - 1, i);
+    });
+    const responses = await Promise.all(phrasesToCheck.map(async phrase => {
+      const track = await findTrackWithString(spotifyApi, phrase.join(' '));
+      return {
+        track,
+        phraseLength: phrase.length
+      };
+    }));
+    isPossible[i] = false;
+    responses.filter(response => response.track != null).forEach((response) => {
+      if (isPossible[i - response.phraseLength]) {
+        isPossible[i] = true;
+        if (trackForLatestPhrase[i] == null ||
+          (((wordCountInLatestPhrase[i] - response.phraseLength) * minimizeTrackCount ? 1 : -1) > 0)
+        ) {
+          // this is our new best option - replace existing
+          wordCountInLatestPhrase[i] = response.phraseLength;
+          trackForLatestPhrase[i] = response.track;
+        }
+      }
+    });
+  }
+
+  if (!isPossible[n]) {
+    return null; // :(
+  }
+
+  const result = [];
+  let i = n;
+  while (i > 0) {
+    result.unshift(trackForLatestPhrase[i]);
+    i -= wordCountInLatestPhrase[i];
+  }
+
+  // TODO: verify result with different inputs
+  return result;
 }
 
 if (accessToken == null) {
@@ -55,9 +111,9 @@ if (accessToken == null) {
 
 
   // TODO: Replace example call with logic, pass to web worker?
-  const targetWord = 'hello'
+  const targetWord = 'don\'t you tell me you love me'
   setTimeout(async () => {
-    const result = await findTracksWithString(spotifyApi, targetWord);
+    const result = await getTracksForPhrase(spotifyApi, targetWord, false);
     console.log({
       result
     })
