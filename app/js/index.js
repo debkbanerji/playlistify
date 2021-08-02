@@ -130,11 +130,21 @@ function setNewResult(result) {
     resultTracks
   } = result;
   document.getElementById('output').hidden = false;
+  const outputText = document.getElementById('output-text');
+  const trackListContainer = document.getElementById('output-track-list');
+  trackListContainer.innerHTML = '';
   if (!isSuccess) {
-    document.getElementById('output-text').innerHTML = 'Failed to generate playlist to spell out input'
+    outputText.innerHTML = 'Failed to generate playlist to spell out input'
   } else {
-    document.getElementById('output-text').innerHTML = ` Successfully created a playlist of ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spells out the input text`
-    const trackListContainer = document.getElementById('output-track-list');
+    outputText.innerHTML = ` Successfully created a playlist of ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spells out the input text`
+    resultTracks.forEach((track,i)=>{
+      console.log(i)
+      const trackElement = document.createElement("div");
+      trackElement.innerHTML = `
+        <span style="font-size: large; font-weight: 350;">${i+1}. </span><span style="font-size: x-large; font-weight: 500;">${track.name}</span> <span  style="font-size: small; font-weight: 400;">by ${track.artists}</span>
+      `
+      trackListContainer.appendChild(trackElement)
+    })
   }
 }
 
