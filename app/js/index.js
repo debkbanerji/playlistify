@@ -2,8 +2,12 @@ const SpotifyWebApi = window.SpotifyWebApi;
 const clientId = CLIENT_ID;
 
 $('[data-toggle="tooltip"]').tooltip();
+
 const inputText = document.getElementById('input-text')
 const inputButton = document.getElementById('submit-input')
+const spotifyPlaylistName = document.getElementById('spotify-playlist-name');
+const spotifyPlaylistDescription = document.getElementById('spotify-playlist-description');
+const generateSpotifyPlaylist = document.getElementById('generate-spotify-playlist');
 
 const accessTokenRegexMatch = /#access_token=(.*?)(&|$)/.exec(window.location.hash);
 const accessToken = accessTokenRegexMatch != null ? accessTokenRegexMatch[1] : null
@@ -117,13 +121,7 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   };
 }
 
-window.currentResult = null;
-
-function setNewResult(result) {
-  window.currentResult = result;
-  console.log(
-    result
-  );
+function setNewResult(result, spotifyApi) {
   const {
     input,
     isSuccess,
@@ -132,19 +130,48 @@ function setNewResult(result) {
   document.getElementById('output').hidden = false;
   const outputText = document.getElementById('output-text');
   const trackListContainer = document.getElementById('output-track-list');
+  const saveToSpotifyControls = document.getElementById('save-to-spotify-controls');
+  saveToSpotifyControls.hidden = !isSuccess;
   trackListContainer.innerHTML = '';
   if (!isSuccess) {
     outputText.innerHTML = 'Failed to generate playlist to spell out input'
   } else {
     outputText.innerHTML = ` Successfully created a playlist of ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spells out the input text`
-    resultTracks.forEach((track,i)=>{
-      console.log(i)
+    resultTracks.forEach((track, i) => {
       const trackElement = document.createElement("div");
       trackElement.innerHTML = `
         <span style="font-size: large; font-weight: 350;">${i+1}. </span><span style="font-size: x-large; font-weight: 500;">${track.name}</span> <span  style="font-size: small; font-weight: 400;">by ${track.artists}</span>
       `
       trackListContainer.appendChild(trackElement)
-    })
+    });
+
+    generateSpotifyPlaylist.addEventListener("click", async () => {
+      inputText.disabled = true;
+      inputButton.disabled = true;
+      spotifyPlaylistName.disabled = true;
+      spotifyPlaylistDescription.disabled = true;
+      generateSpotifyPlaylist.disabled = true;
+
+      let playlistName = spotifyPlaylistName.value;
+      if (sanitizedPhrase(playlistName).replace(/ +/g, '').length < 1) {
+        playlistName = input
+      }
+      let playlistDescription = spotifyPlaylistDescription.value;
+      if (sanitizedPhrase(playlistDescription).replace(/ +/g, '').length < 1) {
+        playlistDescription = null
+      }
+
+      const playlist = await spotifyApi.createPlaylist(playlistName, {
+        'description': playlistDescription,
+        'public': false
+      });
+      await spotifyApi.addTracksToPlaylist(playlist.body.id,
+        resultTracks.map(track => `spotify:track:${track.id}`)
+      );
+
+      window.location.replace(playlist.body.external_urls.spotify);
+    });
+
   }
 }
 
@@ -173,7 +200,7 @@ if (accessToken == null ||
       setNewResult({
         input: targetWord,
         ...result
-      });
+      }, spotifyApi);
     }
     inputText.disabled = false;
     inputButton.disabled = false;
