@@ -4,15 +4,18 @@ const clientId = CLIENT_ID;
 const inputText = document.getElementById('input-text')
 const inputButton = document.getElementById('submit-input')
 
-// TODO: Check to see if token is still valid using timestamp?
-const accessTokenRegexMatch = /#access_token=(.*?)&/.exec(window.location.hash);
+const accessTokenRegexMatch = /#access_token=(.*?)(&|$)/.exec(window.location.hash);
 const accessToken = accessTokenRegexMatch != null ? accessTokenRegexMatch[1] : null
+const loginAttemptedTimeMatch = /login_attempted_at-(.*?)(&|$)/.exec(window.location.hash);
+const loginAttemptedTime = loginAttemptedTimeMatch != null ? Number(loginAttemptedTimeMatch[1]) : null
+const expiresInTimeMatch = /expires_in=(.*?)(&|$)/.exec(window.location.hash);
+const expiresInTime = expiresInTimeMatch != null ? Number(expiresInTimeMatch[1]) * 1000 : null
 
 function login() {
   const scopes = ['playlist-modify-private'];
   // TODO: Switch to website in console
   const redirectUri = 'https://localhost:8080';
-  const redirectState = 'login-attempted';
+  const redirectState = 'login_attempted_at-' + Date.now();
   const showDialog = true;
   const responseType = 'token';
 
@@ -130,9 +133,11 @@ function setNewResult(result) {
   document.getElementById('output').hidden = false;
 }
 
-if (accessToken == null) {
+if (accessToken == null ||
+  loginAttemptedTime == null ||
+  expiresInTime == null ||
+  loginAttemptedTime + expiresInTime < Date.now()) {
   // TODO: Bind login to button
-  // TODO: Check for expired token
   login();
 } else {
   // TODO: unhide relevant UI element
