@@ -55,12 +55,20 @@
       <div class="col-12">
         <div style="display: flex;">
           <input type="text" class="form-control" id="input-text" placeholder="Input text">
-          <button class="btn btn-success" type="button" id="submit-input" style="margin-left: 8px;">
-            Try Generating Playlist
-          </button>
+          <div style="margin-left: 8px;">
+            <button class="btn btn-success" type="button" id="submit-input">
+              Try Generating Playlist
+            </button>
+            <div class="checkbox" style="margin-top: 4px; margin-left: 4px" data-toggle="tooltip" data-placement="bottom" title="Checking this tells the algorithm to prefer playlists with fewer tracks instead of more tracks">
+              <label>
+                <input type="checkbox" id="minimize-track-count">
+                Minimize Track Count
+              </label>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="output" hidden class="col-12" style="margin-top: 16px;">
+      <div id="output" hidden class="col-12">
         <h3 id="output-text">
         </h3>
         <div id="output-track-list">

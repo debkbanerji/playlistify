@@ -1,6 +1,7 @@
 const SpotifyWebApi = window.SpotifyWebApi;
 const clientId = CLIENT_ID;
 
+$('[data-toggle="tooltip"]').tooltip();
 const inputText = document.getElementById('input-text')
 const inputButton = document.getElementById('submit-input')
 
@@ -132,7 +133,7 @@ function setNewResult(result) {
   if (!isSuccess) {
     document.getElementById('output-text').innerHTML = 'Failed to generate playlist to spell out input'
   } else {
-    document.getElementById('output-text').innerHTML = ` Successfully found ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spell out the input text`
+    document.getElementById('output-text').innerHTML = ` Successfully created a playlist of ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spells out the input text`
     const trackListContainer = document.getElementById('output-track-list');
   }
 }
@@ -158,7 +159,7 @@ if (accessToken == null ||
 
     const targetWord = inputText.value;
     if (sanitizedPhrase(targetWord).replace(/ +/g, '').length > 0) {
-      const result = await getTracksForPhrase(spotifyApi, targetWord, false);
+      const result = await getTracksForPhrase(spotifyApi, targetWord, document.getElementById("minimize-track-count").checked);
       setNewResult({
         input: targetWord,
         ...result
