@@ -41,14 +41,21 @@
     </div>
 
     <div id="not-logged-in" class="row">
-      // TODO: Implement login button
+      <div class="col-12">
+        <button class="btn btn-success" type="button" id="login-button">
+          Login with Spotify
+        </button>
+        <div>
+          TODO: Explain login reason
+        </div>
+      </div>
     </div>
 
-    <div id="logged-in" class="row">
+    <div id="logged-in" class="row" hidden>
       <div class="col-12">
         <div style="display: flex;">
           <input type="text" class="form-control" id="input-text" placeholder="Input text">
-          <button class="btn btn-success text-wrap" type="button" id="submit-input" style="margin-left: 8px;">
+          <button class="btn btn-success" type="button" id="submit-input" style="margin-left: 8px;">
             Try Generating Playlist
           </button>
         </div>

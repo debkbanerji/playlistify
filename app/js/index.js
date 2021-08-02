@@ -55,13 +55,6 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   const inputArr = sanitizedTargetString.split(' ');
   const n = inputArr.length;
 
-  if (n < 1) {
-    return {
-      isSuccess: false,
-      checkedTracks: []
-    };
-  }
-
   // initialize DP arrays
   const isPossible = new Array(n + 1);
   const wordCountInLatestPhrase = new Array(n + 1);
@@ -137,10 +130,10 @@ if (accessToken == null ||
   loginAttemptedTime == null ||
   expiresInTime == null ||
   loginAttemptedTime + expiresInTime < Date.now()) {
-  // TODO: Bind login to button
-  login();
+  document.getElementById('login-button').addEventListener("click", login);
 } else {
-  // TODO: unhide relevant UI element
+  document.getElementById('not-logged-in').hidden = true;
+  document.getElementById('logged-in').hidden = false;
 
   // We're logged in - initialize API
   const spotifyApi = new SpotifyWebApi({
@@ -153,12 +146,13 @@ if (accessToken == null ||
     inputButton.disabled = true;
 
     const targetWord = inputText.value;
-    const result = await getTracksForPhrase(spotifyApi, targetWord, false);
-    setNewResult({
-      input: targetWord,
-      ...result
-    });
-
+    if (sanitizedPhrase(targetWord).replace(/ +/g, '').length > 0) {
+      const result = await getTracksForPhrase(spotifyApi, targetWord, false);
+      setNewResult({
+        input: targetWord,
+        ...result
+      });
+    }
     inputText.disabled = false;
     inputButton.disabled = false;
   });
