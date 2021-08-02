@@ -114,7 +114,6 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
     i -= wordCountInLatestPhrase[i];
   }
 
-  // TODO: verify result with different inputs
   return {
     isSuccess: true,
     resultTracks: result
@@ -137,7 +136,7 @@ function setNewResult(result, spotifyApi) {
   if (!isSuccess) {
     outputText.innerHTML = 'Failed to generate playlist to spell out input'
     if (checkedTracks.length > 0) {
-      trackListContainer.innerHTML = `<div style="font-size: x-large; font-weight: 400; margin-top: 16px;">Tracks that were queried when trying to build playlist:</div>`
+      trackListContainer.innerHTML = `<h5 style="margin-top: 16px;">Tracks that were found while trying to build playlist:</h5>`
       checkedTracks.forEach((track, i) => {
         const trackElement = document.createElement("div");
         trackElement.innerHTML = `
