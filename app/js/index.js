@@ -125,7 +125,8 @@ function setNewResult(result, spotifyApi) {
   const {
     input,
     isSuccess,
-    resultTracks
+    resultTracks,
+    checkedTracks
   } = result;
   document.getElementById('output').hidden = false;
   const outputText = document.getElementById('output-text');
@@ -135,6 +136,16 @@ function setNewResult(result, spotifyApi) {
   trackListContainer.innerHTML = '';
   if (!isSuccess) {
     outputText.innerHTML = 'Failed to generate playlist to spell out input'
+    if (checkedTracks.length > 0) {
+      trackListContainer.innerHTML = `<div style="font-size: x-large; font-weight: 400; margin-top: 16px;">Tracks that were queried when trying to build playlist:</div>`
+      checkedTracks.forEach((track, i) => {
+        const trackElement = document.createElement("div");
+        trackElement.innerHTML = `
+          <span style="font-size: large; font-weight: 400;">${track.name}</span> <span  style="font-size: small; font-weight: 400;">by ${track.artists}</span>
+        `
+        trackListContainer.appendChild(trackElement)
+      });
+    }
   } else {
     outputText.innerHTML = ` Successfully created a playlist of ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spells out the input text`
     resultTracks.forEach((track, i) => {
