@@ -55,7 +55,7 @@ async function findTrackWithString(spotifyApi, targetString) {
 }
 
 async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, onProgressUpdate) {
-  const sanitizedTargetString = sanitizedPhrase(targetString).replace(/ +/g, ' ');
+  const sanitizedTargetString = sanitizedPhrase(targetString).replace(/ +/g, ' ').replace(/((^ )|( $))/g, '');
 
   const inputArr = sanitizedTargetString.split(' ');
   const n = inputArr.length;
@@ -215,5 +215,11 @@ if (accessToken == null ||
     }
     inputText.disabled = false;
     inputButton.disabled = false;
+  });
+
+  inputText.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      inputButton.click();
+    }
   });
 }
