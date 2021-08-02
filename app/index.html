@@ -16,8 +16,16 @@
   <meta property="og:description" content="Generate meme playlists using dynamic programming" />
 
   <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
     .btn {
       white-space: nowrap !important;
+      background-color: #1DB954 !important;
+      font-weight: 475 !important;
+      letter-spacing: 0.05em !important;
     }
   </style>
 
@@ -69,12 +77,12 @@
         </div>
       </div>
       <div id="output" hidden class="col-12">
-        <hr/>
+        <hr />
         <h5 id="output-text">
         </h5>
         <div id="output-track-list">
         </div>
-        <hr/>
+        <hr />
         <div id="save-to-spotify-controls" style="margin-top: 16px;" class="w-50">
           <h5>Save as Spotify Playlist</h5>
           <input type="text" class="form-control" id="spotify-playlist-name" placeholder="Playlist Name" style="margin-top: 8px;">
