@@ -112,7 +112,7 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   // TODO: verify result with different inputs
   return {
     isSuccess: true,
-    result
+    resultTracks: result
   };
 }
 
@@ -123,7 +123,18 @@ function setNewResult(result) {
   console.log(
     result
   );
+  const {
+    input,
+    isSuccess,
+    resultTracks
+  } = result;
   document.getElementById('output').hidden = false;
+  if (!isSuccess) {
+    document.getElementById('output-text').innerHTML = 'Failed to generate playlist to spell out input'
+  } else {
+    document.getElementById('output-text').innerHTML = ` Successfully found ${resultTracks.length} track${resultTracks.length === 1 ? '' : 's'} that spell out the input text`
+    const trackListContainer = document.getElementById('output-track-list');
+  }
 }
 
 if (accessToken == null ||
