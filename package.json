@@ -1,7 +1,7 @@
 {
-  "name": "meme-to-playlist",
+  "name": "playlistify",
   "version": "2021.7.31",
-  "description": "Generate meme playlists using dynamic programming",
+  "description": "Convert text to meme playlists using dynamic programming",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/debkbanerji/meme-to-playlist.git"
+    "url": "git+https://github.com/debkbanerji/playlistify.git"
   },
   "author": "debkbanerji",
   "bugs": {
-    "url": "https://github.com/debkbanerji/meme-to-playlist/issues"
+    "url": "https://github.com/debkbanerji/playlistify/issues"
   },
-  "homepage": "https://github.com/debkbanerji/meme-to-playlist#readme",
+  "homepage": "https://github.com/debkbanerji/playlistify#readme",
   "dependencies": {
     "spotify-web-api-node": "^5.0.2"
   }
