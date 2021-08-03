@@ -136,7 +136,7 @@ function setNewResult(result, spotifyApi) {
   if (!isSuccess) {
     outputText.innerHTML = 'Failed to generate playlist to spell out input'
     if (checkedTracks.length > 0) {
-      trackListContainer.innerHTML = `<h5 style="margin-top: 16px;">Tracks that were found while trying to build playlist:</h5>`
+      trackListContainer.innerHTML = `<h5 style="margin-top: 16px;">Tracks that were found while trying to build a playlist:</h5>`
       checkedTracks.forEach((track, i) => {
         const trackElement = document.createElement("div");
         trackElement.innerHTML = `
