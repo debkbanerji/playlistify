@@ -18,8 +18,7 @@ const expiresInTime = expiresInTimeMatch != null ? Number(expiresInTimeMatch[1])
 
 function login() {
   const scopes = ['playlist-modify-private'];
-  // TODO: Switch to website in console
-  const redirectUri = 'https://localhost:8080';
+  const redirectUri = 'https://playlistify.debkbanerji.com';
   const redirectState = 'login_attempted_at-' + Date.now();
   const showDialog = true;
   const responseType = 'token';
