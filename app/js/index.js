@@ -28,6 +28,7 @@ function login() {
 }
 
 const SEARCH_LIMIT = 50;
+const MAX_TRACK_LENGTH_WORDS = 10;
 
 function sanitizedPhrase(phrase) {
   // preserve spaces
@@ -53,6 +54,12 @@ async function findTrackWithString(spotifyApi, targetString) {
   return tracks.length > 0 ? tracks[0] : null;
 }
 
+
+const TIME_BETWEEN_ITERATIONS_MS = 10; // do this so we don't hit rate limiting
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, onProgressUpdate) {
   const sanitizedTargetString = sanitizedPhrase(targetString).replace(/ +/g, ' ').replace(/((^ )|( $))/g, '');
 
@@ -71,9 +78,13 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
   const checkedTracks = [];
 
   for (let i = 1; i <= n; i++) {
+    await sleep(TIME_BETWEEN_ITERATIONS_MS);
     const phrasesToCheck = Array.from(Array(i).keys()).map(j => {
       return inputArr.slice(i - j - 1, i);
-    });
+    }).filter(
+      // could technically be more efficient, but this is easier to read
+      phrase => phrase.length <= MAX_TRACK_LENGTH_WORDS
+    );
     const responses = await Promise.all(phrasesToCheck.map(async phrase => {
       const track = await findTrackWithString(spotifyApi, phrase.join(' '));
       if (track != null) {
