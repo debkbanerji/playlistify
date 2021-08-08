@@ -55,7 +55,7 @@ async function findTrackWithString(spotifyApi, targetString) {
 }
 
 
-const TIME_BETWEEN_ITERATIONS_MS = 10; // do this so we don't hit rate limiting
+const TIME_BETWEEN_ITERATIONS_MS = 100; // do this so we don't hit rate limiting
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -107,6 +107,9 @@ async function getTracksForPhrase(spotifyApi, targetString, minimizeTrackCount, 
           trackForLatestPhrase[i] = response.track;
         }
       }
+    });
+    onProgressUpdate({
+      percentComplete: 100 * i / n
     });
   }
 
@@ -211,17 +214,26 @@ if (accessToken == null ||
   spotifyApi.setAccessToken(accessToken);
 
   inputButton.addEventListener("click", async () => {
+    const loadingContainer = document.getElementById('loading-container');
+    const progressBar = document.getElementById('loading-progress-bar');
+    loadingContainer.hidden = false;
+    progressBar.style.width = '0%';
+    inputButton.hidden = true;
     inputText.disabled = true;
     inputButton.disabled = true;
 
     const targetWord = inputText.value;
     if (sanitizedPhrase(targetWord).replace(/ +/g, '').length > 0) {
-      const result = await getTracksForPhrase(spotifyApi, targetWord, document.getElementById("minimize-track-count").checked);
+      const result = await getTracksForPhrase(spotifyApi, targetWord, document.getElementById("minimize-track-count").checked, (progressStatus) => {
+        progressBar.style.width = `${progressStatus.percentComplete}%`;
+      });
       setNewResult({
         input: targetWord,
         ...result
       }, spotifyApi);
     }
+    loadingContainer.hidden = true;
+    inputButton.hidden = false;
     inputText.disabled = false;
     inputButton.disabled = false;
   });

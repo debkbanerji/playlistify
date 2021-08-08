@@ -78,6 +78,9 @@
             <button class="btn btn-success" type="button" id="submit-input">
               Try Creating Playlist
             </button>
+            <div class="progress" style="height: 37px; width:180px" id="loading-container" hidden>
+              <div class="progress-bar" id="loading-progress-bar" role="progressbar" style="background-color: #1DB954; transition: none;"></div>
+            </div>
             <div class="checkbox" style="margin-top: 4px; margin-left: 4px" data-toggle="tooltip" data-placement="bottom" title="Checking this tells the algorithm to prefer playlists with fewer tracks instead of more tracks">
               <label>
                 <input type="checkbox" id="minimize-track-count">
