@@ -14,8 +14,8 @@ A deployed version can be found [here](https://playlistify.debkbanerji.com).
 
 **Important: Login will not work unless your Spotify email is whitelisted in the console**
 
-If you're a friend of mine who wants to mess around with the app, let me know and I can enable it for your Spotify account
+If you're a friend of mine who wants to mess around with the app, let me know and I can enable it for your Spotify account.
 
-You can also open an issue on the [issues tab](https://github.com/debkbanerji/playlistify/issues) if you just stumbled upon this
+You can also open an issue on the [issues tab](https://github.com/debkbanerji/playlistify/issues) if you just stumbled upon this.
 
-If there's enough user demand, I can look into opening this up for general usage, but doing this for Spotify apps isn't as easy as it once was
+If there's enough user demand, I can look into opening this up for general usage, but doing this for Spotify apps isn't as easy as it once was.
