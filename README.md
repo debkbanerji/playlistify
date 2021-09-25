@@ -1,9 +1,11 @@
 # Playlistify
+[**playlistify.debkbanerji.com**](https://playlistify.debkbanerji.com)
+
 Convert text to meme playlists from input text using a dynamic programming.
 
 ## Usage
 
-![Example Playlist](app/assets/png/example-playlist.png)
+[![Example Playlist](app/assets/png/example-playlist.png)](https://playlistify.debkbanerji.com)
 
 The algorithm attempts to create a playlist who's track names form the input text when concatenated together. It's designed to parallelize API calls to optimize runtime.
 
