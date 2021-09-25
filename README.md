@@ -10,7 +10,7 @@ The algorithm attempts to create a playlist who's track names form the input tex
 Login with Spotify is required since Spotify is the data source. The app doesn't store any user information - login is only required so tracks can be searched for using the Spotify API, and if you want to save any created Playlists.
 
 ## Deployed Version
-A deployed version can be found [here](https://playlistify.debkbanerji.com).
+A deployed version can be found at [**playlistify.debkbanerji.com**](https://playlistify.debkbanerji.com)
 
 **Important: Login will not work unless your Spotify email is whitelisted in the console**
 
